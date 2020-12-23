@@ -128,6 +128,10 @@ open class FluidTabBarItemContentView: UIView {
         titleLabel.textAlignment = .center
         return titleLabel
     }()
+    
+    open var titleFontSize: CGFloat?
+    
+    open var titleFontName: String?
 
     internal let imageViewContainer = UIView()
 
@@ -180,7 +184,7 @@ open class FluidTabBarItemContentView: UIView {
         }
 
         if !imageView.isHidden && !titleLabel.isHidden {
-            titleLabel.font = UIFont.systemFont(ofSize: fontSize)
+            titleLabel.font = getTitleFont(preferredSize: fontSize)
             titleLabel.sizeToFit()
             if #available(iOS 11.0, *), isWide {
                 titleLabel.frame = CGRect(
@@ -217,7 +221,7 @@ open class FluidTabBarItemContentView: UIView {
                 height: imageSize
             )
         } else if !titleLabel.isHidden {
-            titleLabel.font = UIFont.systemFont(ofSize: fontSize)
+            titleLabel.font = getTitleFont(preferredSize: fontSize)
             titleLabel.sizeToFit()
             titleLabel.frame = CGRect(
                 x: (width - titleLabel.bounds.size.width) / 2.0,
@@ -232,6 +236,15 @@ open class FluidTabBarItemContentView: UIView {
         animator.initialize()
         if selected {
             select(animated: false, completion: nil)
+        }
+    }
+    
+    private func getTitleFont(preferredSize: CGFloat) -> UIFont{
+        if let concreteFontSize = titleFontSize, let concreteFontName = titleFontName{
+            return UIFont(name: concreteFontName, size: concreteFontSize)!
+        }
+        else{
+            return UIFont.systemFont(ofSize: preferredSize)
         }
     }
 }
